@@ -26,7 +26,7 @@ jobs:
           pip install dbt-core
           pip install dbt-snowflake
 
-            - name: Create dbt Profile
+      - name: Create dbt Profile
         run: |
           mkdir -p ~/.dbt
 
