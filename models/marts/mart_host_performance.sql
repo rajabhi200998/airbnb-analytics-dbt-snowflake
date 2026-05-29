@@ -44,11 +44,10 @@ SELECT
 
     COALESCE(o.total_days, 0) AS total_days,
 
-    ROUND(
-        COALESCE(o.booked_days, 0) * 100.0
-        / NULLIF(o.total_days, 0),
-        2
-    ) AS occupancy_rate_pct,
+    {{calculate_occupancy_rate(
+        'COALESCE(o.booked_days,0)','o.total_days'
+    )
+    }} as occupancy_rate_pcts
 
     COALESCE(o.estimated_revenue, 0) AS estimated_revenue
 

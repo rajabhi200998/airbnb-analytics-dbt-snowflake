@@ -7,6 +7,7 @@ WITH listings AS (
 
 SELECT
 
+    {{ generate_listing_key('listing_id') }} AS listing_sk,
     listing_id,
     listing_name,
 
