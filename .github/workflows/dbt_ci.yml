@@ -28,3 +28,6 @@ jobs:
 
       - name: Verify dbt Installation
         run: dbt --version
+
+      - name: Parse dbt project
+        run: dbt parse
