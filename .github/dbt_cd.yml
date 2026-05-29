@@ -1,0 +1,56 @@
+name: dbt CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  dbt-deployment:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dbt
+        run: |
+          pip install dbt-core
+          pip install dbt-snowflake
+
+      - name: Create dbt Profile
+        run: |
+          mkdir -p ~/.dbt
+
+          cat > ~/.dbt/profiles.yml << EOF
+          airbnb_analytics:
+            outputs:
+              dev:
+                type: snowflake
+                account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+                user: ${{ secrets.SNOWFLAKE_USER }}
+                password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+                role: ${{ secrets.SNOWFLAKE_ROLE }}
+                warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+                database: ${{ secrets.SNOWFLAKE_DATABASE }}
+                schema: ${{ secrets.SNOWFLAKE_SCHEMA }}
+                threads: 4
+            target: dev
+          EOF
+
+      - name: Run dbt Models
+        run: dbt run
+
+      - name: Run dbt Tests
+        run: dbt test
+
+      - name: Run dbt Snapshots
+        run: dbt snapshot
