@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: stg_listings
+    description: Cleaned Airbnb listings staging model
+
+    columns:
+      - name: listing_id
+        description: Unique identifier for each Airbnb listing
+        tests:
+          - not_null
+          - unique
+
+      - name: host_id
+        description: Unique identifier for host
+        tests:
+          - not_null
+
+  - name: stg_calendar
+    description: Cleaned Airbnb calendar staging model
+
+    columns:
+      - name: listing_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_listings')
+                field: listing_id
+
+      - name: calendar_date
+        tests:
+          - not_null
+
+  - name: stg_reviews
+    description: Cleaned Airbnb reviews staging model
+
+    columns:
+      - name: review_id
+        tests:
+          - not_null
+          - unique
+
+      - name: listing_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_listings')
+                field: listing_id

@@ -1,0 +1,27 @@
+version: 2
+
+sources:
+  - name: airbnb_raw
+    database: AIRBNB_ANALYTICS_DB
+    schema: AIRBNB_RAW
+
+    tables:
+      - name: raw_listings
+        columns:
+          - name: c1
+            tests:
+              - not_null
+
+      - name: raw_calendar
+        columns:
+          - name: c1
+            tests:
+              - not_null
+
+      - name: raw_reviews
+        columns:
+          - name: c2
+            tests:
+              - not_null
+
+      - name: raw_neighbourhoods
